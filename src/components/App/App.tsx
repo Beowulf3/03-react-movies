@@ -1,6 +1,6 @@
 
 import { useEffect, useState} from 'react';
-import fetchMovies from '../../services/movieService'
+import {fetchMovies} from '../../services/movieService'
 import MovieGrid from '../MovieGrid/MovieGrid';
 import SearchBar from '../SearchBar/SearchBar'
 import css from './App.module.css'
@@ -17,20 +17,18 @@ function App() {
     const [isLoading, setIsloading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
+    
     const handleSearch = (newQuery: string) => {
         setMovie([]);
         setQuery(newQuery);
     }
 
-    const handleOpenModal = (movie: Movie) => {
+    const handleMovieSelect = (movie: Movie) => {
         setSelectedMovie(movie);
-        openModal();
     }
-
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+    const handleCloseModal = () => {
+        setSelectedMovie(null);
+    }
     
     useEffect(() => {
         if (!query) return;
@@ -60,24 +58,9 @@ function App() {
     return (
         <div className={css.app}>
             <SearchBar onSubmit={handleSearch} />
-            {isLoading ? <Loader /> : error ? <ErrorMessage /> : <MovieGrid onSelect={handleOpenModal} movies={movies} />}
-            {isModalOpen && selectedMovie && <MovieModal movie={selectedMovie} onClose={closeModal} />}
-            <Toaster
-                position="top-center"
-                reverseOrder={false}
-                gutter={8}
-                containerClassName=""
-                containerStyle={{}}
-                toasterId="default"
-                toastOptions={{
-                    duration: 5000,
-                    removeDelay: 1000,
-                    style: {
-                    background: '#363636',
-                    color: '#fff',
-                    },
-                }}
-            />
+            {isLoading ? <Loader /> : error ? <ErrorMessage /> : <MovieGrid onSelect={handleMovieSelect} movies={movies} />}
+            {selectedMovie && <MovieModal movie={selectedMovie} onClose={handleCloseModal} />}
+            <Toaster position="top-center"/>
         </div>
     )
     
