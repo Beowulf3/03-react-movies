@@ -42,8 +42,7 @@ function App() {
                     toast.error('No movies found for your request.');
                     return;
                 }
-                setMovie(response.results);
-                console.log(movies);     
+                setMovie(response.results);  
                 setError(null)
             } catch (error) {
                 const message = error instanceof Error ? error.message : 'Something went wrong';

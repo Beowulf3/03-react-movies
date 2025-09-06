@@ -23,6 +23,5 @@ export default async function fetchMovies(userQuery: string){
             Authorization: `Bearer ${moviedbKey}`
         }
     });
-    console.log(response);
     return response.data;
 }
